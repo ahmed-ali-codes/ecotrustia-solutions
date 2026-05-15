@@ -1,8 +1,0 @@
-/* 
-  Styles are largely handled via Tailwind and global JSX in the component 
-  to ensure a premium, integrated look with the rest of the app.
-*/
-
-.blog-post-container {
-  /* Legacy wrapper if needed */
-}
