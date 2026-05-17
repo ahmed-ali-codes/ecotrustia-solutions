@@ -6,39 +6,39 @@ import Link from "next/link";
 export default function ToolsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const tools = [
-    { name: "PDF Merger", icon: "fa-file-pdf", link: "/tools/pdf_merger", desc: "Combine multiple streams into a single architecture.", cat: "DOC" },
-    { name: "PDF Compressor", icon: "fa-file-archive", link: "/tools/pdf_compressor", desc: "Reduce document density using high-fidelity stream pruning.", cat: "DOC" },
-    { name: "Image Converter", icon: "fa-image", link: "/tools/image_converter", desc: "Transpile visual data between multi-format buffers.", cat: "VISUAL" },
-    { name: "Image Compressor", icon: "fa-compress-arrows-alt", link: "/tools/image_compressor", desc: "Optimize visual entropy for bandwidth-constrained nodes.", cat: "VISUAL" },
-    { name: "URL Shortener", icon: "fa-link", link: "/tools/url_shortener", desc: "Alias long-form endpoints into high-frequency links.", cat: "NET" },
-    { name: "QR Generator", icon: "fa-qrcode", link: "/tools/qr_code_generator", desc: "Generate encrypted physical-to-digital access keys.", cat: "ACCESS" },
-    { name: "Password Generator", icon: "fa-lock", link: "/tools/password_generator", desc: "Entropy-driven sequence generation for secure access.", cat: "SEC" },
-    { name: "Audio Converter", icon: "fa-file-audio", link: "/tools/audio_converter", desc: "Transcode acoustic signals between digital containers.", cat: "VISUAL" },
-    { name: "Video Converter", icon: "fa-file-video", link: "/tools/video_converter", desc: "Manipulate temporal visual streams across multi-codecs.", cat: "VISUAL" },
-    { name: "File Compressor", icon: "fa-file-zipper", link: "/tools/file_compressor", desc: "Encapsulate data matrices into high-density archives.", cat: "DOC" },
+    { name: "PDF Merger", icon: "fa-file-pdf", link: "/tools/pdf-merger", desc: "Combine multiple streams into a single architecture.", cat: "DOC" },
+    { name: "PDF Compressor", icon: "fa-file-archive", link: "/tools/pdf-compressor", desc: "Reduce document density using high-fidelity stream pruning.", cat: "DOC" },
+    { name: "Image Converter", icon: "fa-image", link: "/tools/image-converter", desc: "Transpile visual data between multi-format buffers.", cat: "VISUAL" },
+    { name: "Image Compressor", icon: "fa-compress-arrows-alt", link: "/tools/image-compressor", desc: "Optimize visual entropy for bandwidth-constrained nodes.", cat: "VISUAL" },
+    { name: "URL Shortener", icon: "fa-link", link: "/tools/url-shortener", desc: "Alias long-form endpoints into high-frequency links.", cat: "NET" },
+    { name: "QR Generator", icon: "fa-qrcode", link: "/tools/qr-code-generator", desc: "Generate encrypted physical-to-digital access keys.", cat: "ACCESS" },
+    { name: "Password Generator", icon: "fa-lock", link: "/tools/password-generator", desc: "Entropy-driven sequence generation for secure access.", cat: "SEC" },
+    { name: "Audio Converter", icon: "fa-file-audio", link: "/tools/audio-converter", desc: "Transcode acoustic signals between digital containers.", cat: "VISUAL" },
+    { name: "Video Converter", icon: "fa-file-video", link: "/tools/video-converter", desc: "Manipulate temporal visual streams across multi-codecs.", cat: "VISUAL" },
+    { name: "File Compressor", icon: "fa-file-zipper", link: "/tools/file-compressor", desc: "Encapsulate data matrices into high-density archives.", cat: "DOC" },
     { name: "Code Tester", icon: "fa-terminal", link: "/tools/livetester", desc: "Real-time sandbox for logic validation and debugging.", cat: "DEV" },
-    { name: "Word Counter", icon: "fa-font", link: "/tools/word_counter", desc: "Quantify linguistic data streams and lexical density.", cat: "DATA" },
-    { name: "Case Converter", icon: "fa-exchange-alt", link: "/tools/case_converter", desc: "Transform string casing between standard protocols.", cat: "DATA" },
-    { name: "Remove Spaces", icon: "fa-broom", link: "/tools/remove_spaces", desc: "Sanitize buffers by purging excessive spatial entropy.", cat: "DATA" },
-    { name: "Slug Generator", icon: "fa-link", link: "/tools/slug_generator", desc: "SEO permalink architecture for content nodes.", cat: "DATA" },
-    { name: "Pro Compressor", icon: "fa-bolt", link: "/tools/client_image_compressor", desc: "Enterprise-grade asset transpiler with advanced metrics.", cat: "VISUAL" },
-    { name: "Image Resizer", icon: "fa-expand-arrows-alt", link: "/tools/image_resizer", desc: "Redefine dimensional matrix grids with high-fidelity scaling.", cat: "VISUAL" },
-    { name: "Image to Base64", icon: "fa-code", link: "/tools/image_to_base64", desc: "Synthesize binary visual assets into inline code hashes.", cat: "DEV" },
-    { name: "Color Picker", icon: "fa-eye-dropper", link: "/tools/color_picker", desc: "Extract spectral values from your visual environment.", cat: "VISUAL" },
-    { name: "HEX to RGB", icon: "fa-adjust", link: "/tools/hex_to_rgb", desc: "Transcode color space coordinates between architectures.", cat: "VISUAL" },
-    { name: "Gradient Gen", icon: "fa-palette", link: "/tools/gradient_generator", desc: "Construct multi-node chromatic transitions for UI.", cat: "VISUAL" },
-    { name: "Age Calculator", icon: "fa-birthday-cake", link: "/tools/age_calculator", desc: "Temporal delta calculation since initialization.", cat: "MATH" },
-    { name: "Date Delta", icon: "fa-calendar-alt", link: "/tools/days_between_dates", desc: "Measure inter-temporal magnitude between two nodes.", cat: "MATH" },
-    { name: "Countdown Timer", icon: "fa-clock", link: "/tools/countdown_timer", desc: "Synchronized temporal decay for event terminal.", cat: "MATH" },
-    { name: "Scientific Calculator", icon: "fa-calculator", link: "/tools/scientific_calculator", desc: "Advanced arithmetic logic engine with trigonometric and logarithmic functions.", cat: "MATH" },
-    { name: "Percent Calc", icon: "fa-percentage", link: "/tools/percentage_calculator", desc: "Calculate relative magnitude and proportional deltas.", cat: "MATH" },
-    { name: "BMI Calculator", icon: "fa-weight", link: "/tools/bmi_calculator", desc: "Biometric mass index calculation and diagnostic.", cat: "BIO" },
-    { name: "Length Converter", icon: "fa-ruler", link: "/tools/length_converter", desc: "Mathematical conversion between dimensional metrics.", cat: "MATH" },
-    { name: "Weight Converter", icon: "fa-balance-scale", link: "/tools/weight_converter", desc: "Convert mass metrics across global standard protocols.", cat: "MATH" },
-    { name: "Calorie Calc", icon: "fa-utensils", link: "/tools/calories_calculator", desc: "Metabolic energy expenditure projection node.", cat: "BIO" },
-    { name: "Temp Converter", icon: "fa-thermometer-half", link: "/tools/temperature_converter", desc: "Thermal kinetic energy mapping across scales.", cat: "MATH" },
-    { name: "Lorem Ipsum", icon: "fa-align-left", link: "/tools/lorem_ipsum_generator", desc: "Synthesize pseudo-latin linguistic filler streams.", cat: "DATA" },
-    { name: "Miles to KM", icon: "fa-road", link: "/tools/convert_miles_to_kilometer", desc: "Radial distance mapping between imperial and metric.", cat: "MATH" },
+    { name: "Word Counter", icon: "fa-font", link: "/tools/word-counter", desc: "Quantify linguistic data streams and lexical density.", cat: "DATA" },
+    { name: "Case Converter", icon: "fa-exchange-alt", link: "/tools/case-converter", desc: "Transform string casing between standard protocols.", cat: "DATA" },
+    { name: "Remove Spaces", icon: "fa-broom", link: "/tools/remove-spaces", desc: "Sanitize buffers by purging excessive spatial entropy.", cat: "DATA" },
+    { name: "Slug Generator", icon: "fa-link", link: "/tools/slug-generator", desc: "SEO permalink architecture for content nodes.", cat: "DATA" },
+    { name: "Pro Compressor", icon: "fa-bolt", link: "/tools/client-image-compressor", desc: "Enterprise-grade asset transpiler with advanced metrics.", cat: "VISUAL" },
+    { name: "Image Resizer", icon: "fa-expand-arrows-alt", link: "/tools/image-resizer", desc: "Redefine dimensional matrix grids with high-fidelity scaling.", cat: "VISUAL" },
+    { name: "Image to Base64", icon: "fa-code", link: "/tools/image-to-base64", desc: "Synthesize binary visual assets into inline code hashes.", cat: "DEV" },
+    { name: "Color Picker", icon: "fa-eye-dropper", link: "/tools/color-picker", desc: "Extract spectral values from your visual environment.", cat: "VISUAL" },
+    { name: "HEX to RGB", icon: "fa-adjust", link: "/tools/hex-to-rgb", desc: "Transcode color space coordinates between architectures.", cat: "VISUAL" },
+    { name: "Gradient Gen", icon: "fa-palette", link: "/tools/gradient-generator", desc: "Construct multi-node chromatic transitions for UI.", cat: "VISUAL" },
+    { name: "Age Calculator", icon: "fa-birthday-cake", link: "/tools/age-calculator", desc: "Temporal delta calculation since initialization.", cat: "MATH" },
+    { name: "Date Delta", icon: "fa-calendar-alt", link: "/tools/days-between-dates", desc: "Measure inter-temporal magnitude between two nodes.", cat: "MATH" },
+    { name: "Countdown Timer", icon: "fa-clock", link: "/tools/countdown-timer", desc: "Synchronized temporal decay for event terminal.", cat: "MATH" },
+    { name: "Scientific Calculator", icon: "fa-calculator", link: "/tools/scientific-calculator", desc: "Advanced arithmetic logic engine with trigonometric and logarithmic functions.", cat: "MATH" },
+    { name: "Percent Calc", icon: "fa-percentage", link: "/tools/percentage-calculator", desc: "Calculate relative magnitude and proportional deltas.", cat: "MATH" },
+    { name: "BMI Calculator", icon: "fa-weight", link: "/tools/bmi-calculator", desc: "Biometric mass index calculation and diagnostic.", cat: "BIO" },
+    { name: "Length Converter", icon: "fa-ruler", link: "/tools/length-converter", desc: "Mathematical conversion between dimensional metrics.", cat: "MATH" },
+    { name: "Weight Converter", icon: "fa-balance-scale", link: "/tools/weight-converter", desc: "Convert mass metrics across global standard protocols.", cat: "MATH" },
+    { name: "Calorie Calc", icon: "fa-utensils", link: "/tools/calories-calculator", desc: "Metabolic energy expenditure projection node.", cat: "BIO" },
+    { name: "Temp Converter", icon: "fa-thermometer-half", link: "/tools/temperature-converter", desc: "Thermal kinetic energy mapping across scales.", cat: "MATH" },
+    { name: "Lorem Ipsum", icon: "fa-align-left", link: "/tools/lorem-ipsum-generator", desc: "Synthesize pseudo-latin linguistic filler streams.", cat: "DATA" },
+    { name: "Miles to KM", icon: "fa-road", link: "/tools/miles-to-kilometer", desc: "Radial distance mapping between imperial and metric.", cat: "MATH" },
   ];
 
   const filteredTools = tools.filter(tool =>
@@ -62,7 +62,7 @@ export default function ToolsPage() {
           </div>
 
           <h1 className="text-5xl md:text-8xl lg:text-[110px] font-black mb-10 tracking-[-0.05em] leading-[0.9] text-white">
-            Neural <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400">Workbench</span>
+            Tools <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400">Nest</span>
           </h1>
 
           <p className="text-gray-400 text-lg md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light italic">

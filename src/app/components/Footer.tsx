@@ -190,8 +190,8 @@ const Footer = () => {
           <p style={{ opacity: 0.5 }}>© 2026 Ecotrustia Solutions. All rights reserved.</p>
 
           <div style={{ display: 'flex', gap: '28px' }}>
-            <Link href="#" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }} className="footer-link">Privacy Policy</Link>
-            <Link href="#" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }} className="footer-link">Terms of Service</Link>
+            <Link href="/privacy-policy" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }} className="footer-link">Privacy Policy</Link>
+            <Link href="/terms-of-service" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }} className="footer-link">Terms of Service</Link>
           </div>
         </div>
       </div>

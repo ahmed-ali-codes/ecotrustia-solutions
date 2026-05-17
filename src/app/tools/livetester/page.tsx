@@ -99,7 +99,7 @@ document.getElementById('trigger').addEventListener('click', () => {
 
     return (
         <div className="min-h-screen bg-[#050505] text-white selection:bg-purple-500/30 font-sans">
-            <title>Neural Code Sandbox | Ecotrustia Solutions</title>
+            <title>Live Code Tester | Ecotrustia Solutions</title>
             <meta name="description" content="A high-performance live code testing environment for HTML, CSS, and JavaScript. Real-time rendering with isolated sandbox execution." />
 
             {/* ─── Hero Section ─── */}

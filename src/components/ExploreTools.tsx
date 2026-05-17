@@ -10,14 +10,14 @@ interface Tool {
 }
 
 const allTools: Tool[] = [
-    { name: "PDF Merger", icon: <FaFilePdf />, link: "/tools/pdf_merger", desc: "Combine multiple streams into a single architecture." },
-    { name: "PDF Compressor", icon: <FaFileArchive />, link: "/tools/pdf_compressor", desc: "Reduce document density using high-fidelity stream pruning." },
-    { name: "Image Converter", icon: <FaImage />, link: "/tools/image_converter", desc: "Transpile visual data between multi-format buffers." },
-    { name: "QR Generator", icon: <FaQrcode />, link: "/tools/qr_code_generator", desc: "Generate encrypted physical-to-digital access keys." },
-    { name: "Password Generator", icon: <FaLock />, link: "/tools/password_generator", desc: "Entropy-driven sequence generation for secure access." },
-    { name: "Length Converter", icon: <FaRuler />, link: "/tools/length_converter", desc: "Mathematical conversion between dimensional metrics." },
-    { name: "Word Counter", icon: <FaFont />, link: "/tools/word_counter", desc: "Quantify linguistic data streams and lexical density." },
-    { name: "URL Shortener", icon: <FaLink />, link: "/tools/url_shortener", desc: "Alias long-form endpoints into high-frequency links." }
+    { name: "PDF Merger", icon: <FaFilePdf />, link: "/tools/pdf-merger", desc: "Combine multiple streams into a single architecture." },
+    { name: "PDF Compressor", icon: <FaFileArchive />, link: "/tools/pdf-compressor", desc: "Reduce document density using high-fidelity stream pruning." },
+    { name: "Image Converter", icon: <FaImage />, link: "/tools/image-converter", desc: "Transpile visual data between multi-format buffers." },
+    { name: "QR Generator", icon: <FaQrcode />, link: "/tools/qr-code-generator", desc: "Generate encrypted physical-to-digital access keys." },
+    { name: "Password Generator", icon: <FaLock />, link: "/tools/password-generator", desc: "Entropy-driven sequence generation for secure access." },
+    { name: "Length Converter", icon: <FaRuler />, link: "/tools/length-converter", desc: "Mathematical conversion between dimensional metrics." },
+    { name: "Word Counter", icon: <FaFont />, link: "/tools/word-counter", desc: "Quantify linguistic data streams and lexical density." },
+    { name: "URL Shortener", icon: <FaLink />, link: "/tools/url-shortener", desc: "Alias long-form endpoints into high-frequency links." }
 ];
 
 export default function ExploreTools({ currentPath }: { currentPath: string }) {
