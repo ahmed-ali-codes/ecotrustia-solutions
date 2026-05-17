@@ -4,7 +4,7 @@ export const useCountdownTimer = () => {
   const [totalSeconds, setTotalSeconds] = useState(600);
   const [remainingSeconds, setRemainingSeconds] = useState(600);
   const [isRunning, setIsRunning] = useState(false);
-  const countdown = useRef<number | null>(null);
+  const countdown = useRef<any>(null);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
