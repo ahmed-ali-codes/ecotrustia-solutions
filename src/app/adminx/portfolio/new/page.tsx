@@ -43,7 +43,7 @@ export default function NewProjectPage() {
     const result = ProjectSchema.safeParse(newProject);
 
     if (!result.success) {
-      setError(result.error.errors.map((err) => err.message).join(', '));
+      setError(result.error.issues.map((err) => err.message).join(', '));
       return;
     }
 

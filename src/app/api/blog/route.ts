@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const result = BlogSchema.safeParse(newBlog);
 
   if (!result.success) {
-    return NextResponse.json({ error: result.error.errors }, { status: 400 });
+    return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
   const blogs = readBlogs();

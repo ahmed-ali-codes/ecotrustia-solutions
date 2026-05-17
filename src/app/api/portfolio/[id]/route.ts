@@ -56,7 +56,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const result = ProjectSchema.safeParse(updatedProject);
 
   if (!result.success) {
-    return NextResponse.json({ error: result.error.errors }, { status: 400 });
+    return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
   const projects = readProjects();

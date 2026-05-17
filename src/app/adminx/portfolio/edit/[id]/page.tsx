@@ -64,7 +64,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     const result = ProjectSchema.safeParse(updatedProject);
 
     if (!result.success) {
-      setError(result.error.errors.map((err) => err.message).join(', '));
+      setError(result.error.issues.map((err) => err.message).join(', '));
       return;
     }
 

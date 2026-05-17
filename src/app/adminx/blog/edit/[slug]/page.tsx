@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Blog, BlogSchema } from '../../../lib/db';
 import './edit.css';
 
-export default function EditBlogPostPage({ params }: { params: { slug: string } }) {
+export default function EditBlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const unwrappedParams = use(params);
+  const { slug: initialSlug } = unwrappedParams;
+
   const [blog, setBlog] = useState<Blog | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
@@ -22,7 +25,7 @@ export default function EditBlogPostPage({ params }: { params: { slug: string } 
 
   useEffect(() => {
     const fetchBlog = async () => {
-      const res = await fetch(`/api/blog/${params.slug}`);
+      const res = await fetch(`/api/blog/${initialSlug}`);
       const data = await res.json();
       setBlog(data);
       setTitle(data.title);
@@ -36,7 +39,7 @@ export default function EditBlogPostPage({ params }: { params: { slug: string } 
       setMetaDescription(data.metaDescription);
     };
     fetchBlog();
-  }, [params.slug]);
+  }, [initialSlug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +62,7 @@ export default function EditBlogPostPage({ params }: { params: { slug: string } 
     const result = BlogSchema.safeParse(updatedBlog);
 
     if (!result.success) {
-      setError(result.error.errors.map((err) => err.message).join(', '));
+      setError(result.error.issues.map((err) => err.message).join(', '));
       return;
     }
 
