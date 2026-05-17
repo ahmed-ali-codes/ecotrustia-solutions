@@ -28,7 +28,7 @@
     "jose": "^6.1.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
-    "next": "15.5.4",
+    "next": "^16.2.6",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.6.205",
     "qrcode.react": "^4.2.0",
@@ -50,7 +50,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "^16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
