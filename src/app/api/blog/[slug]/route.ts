@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Blog, BlogSchema } from '../../../adminx/lib/db';
-import { readJsonBlob, writeJsonBlob } from '../../../../lib/blob-storage';
+import { readJsonBlob, writeJsonBlob, uploadImageToBlob, deleteImageFromBlob } from '../../../../lib/blob-storage';
 
 const DATA_KEY = 'data/blogs.json';
 
@@ -19,6 +19,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 export async function PUT(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const updatedBlog = await req.json();
+
+  if (updatedBlog.imageUrl) {
+    updatedBlog.imageUrl = await uploadImageToBlob(updatedBlog.imageUrl);
+  }
+
   const result = BlogSchema.safeParse(updatedBlog);
 
   if (!result.success) {
@@ -30,6 +35,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ slug: st
 
   if (index === -1) {
     return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
+  }
+
+  const oldImage = blogs[index].imageUrl;
+  if (oldImage && oldImage !== result.data.imageUrl) {
+    await deleteImageFromBlob(oldImage);
   }
 
   blogs[index] = result.data;
@@ -45,6 +55,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ slug:
 
   if (blogs.length === filteredBlogs.length) {
     return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
+  }
+
+  const blogToDelete = blogs.find((p) => p.slug === slug);
+  if (blogToDelete?.imageUrl) {
+    await deleteImageFromBlob(blogToDelete.imageUrl);
   }
 
   await writeJsonBlob(DATA_KEY, filteredBlogs);

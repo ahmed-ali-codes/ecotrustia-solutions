@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Blog, BlogSchema } from '../../adminx/lib/db';
-import { readJsonBlob, writeJsonBlob } from '../../../lib/blob-storage';
+import { readJsonBlob, writeJsonBlob, uploadImageToBlob } from '../../../lib/blob-storage';
 
 const DATA_KEY = 'data/blogs.json';
 
@@ -11,6 +11,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const newBlog = await req.json();
+  
+  if (newBlog.imageUrl) {
+    newBlog.imageUrl = await uploadImageToBlob(newBlog.imageUrl);
+  }
+
   const result = BlogSchema.safeParse(newBlog);
 
   if (!result.success) {
