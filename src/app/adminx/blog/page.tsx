@@ -19,14 +19,15 @@ export default function BlogManagementPage() {
     fetchBlogs();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (slug: string, id: string) => {
     if (confirm('Are you sure you want to delete this blog post?')) {
-      await fetch(`/api/blog/${id}`, {
+      await fetch(`/api/blog/${slug}`, {
         method: 'DELETE',
       });
       setBlogs(blogs.filter((blog) => blog.id !== id));
     }
   };
+
 
   return (
     <div className="blog-management-container">
@@ -48,7 +49,7 @@ export default function BlogManagementPage() {
               <Link href={`/adminx/blog/edit/${blog.slug}`} className="edit-link">
                 Edit
               </Link>
-              <button onClick={() => handleDelete(blog.id)} className="delete-button">
+              <button onClick={() => handleDelete(blog.slug, blog.id)} className="delete-button">
                 Delete
               </button>
             </div>

@@ -66,7 +66,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
       return;
     }
 
-    await fetch(`/api/blog/${blog.id}`, {
+    await fetch(`/api/blog/${blog.slug}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(result.data),
