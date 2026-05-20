@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
       'img.icons8.com',
       'unsplash.com',
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
+    ],
   },
 };
 

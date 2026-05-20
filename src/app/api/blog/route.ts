@@ -1,21 +1,11 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { Blog, BlogSchema } from '../../adminx/lib/db';
+import { readJsonBlob, writeJsonBlob } from '../../../lib/blob-storage';
 
-const blogsFilePath = path.join(process.cwd(), 'data', 'blogs.json');
-
-const readBlogs = (): Blog[] => {
-  const data = fs.readFileSync(blogsFilePath, 'utf-8');
-  return JSON.parse(data);
-};
-
-const writeBlogs = (blogs: Blog[]) => {
-  fs.writeFileSync(blogsFilePath, JSON.stringify(blogs, null, 2));
-};
+const DATA_KEY = 'data/blogs.json';
 
 export async function GET() {
-  const blogs = readBlogs();
+  const blogs = await readJsonBlob<Blog>(DATA_KEY);
   return NextResponse.json(blogs);
 }
 
@@ -27,9 +17,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  const blogs = readBlogs();
+  const blogs = await readJsonBlob<Blog>(DATA_KEY);
   blogs.push(result.data);
-  writeBlogs(blogs);
+  await writeJsonBlob(DATA_KEY, blogs);
 
   return NextResponse.json(result.data, { status: 201 });
 }

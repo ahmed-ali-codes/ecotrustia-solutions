@@ -16,7 +16,7 @@ export default function ToolsPage() {
     { name: "Audio Converter", icon: "fa-file-audio", link: "/tools/audio-converter", desc: "Transcode acoustic signals between digital containers.", cat: "VISUAL" },
     { name: "Video Converter", icon: "fa-file-video", link: "/tools/video-converter", desc: "Manipulate temporal visual streams across multi-codecs.", cat: "VISUAL" },
     { name: "File Compressor", icon: "fa-file-zipper", link: "/tools/file-compressor", desc: "Encapsulate data matrices into high-density archives.", cat: "DOC" },
-    { name: "Code Tester", icon: "fa-terminal", link: "/tools/livetester", desc: "Real-time sandbox for logic validation and debugging.", cat: "DEV" },
+    { name: "Code Tester", icon: "fa-terminal", link: "/tools/live-code-tester", desc: "Real-time sandbox for logic validation and debugging.", cat: "DEV" },
     { name: "Word Counter", icon: "fa-font", link: "/tools/word-counter", desc: "Quantify linguistic data streams and lexical density.", cat: "DATA" },
     { name: "Case Converter", icon: "fa-exchange-alt", link: "/tools/case-converter", desc: "Transform string casing between standard protocols.", cat: "DATA" },
     { name: "Remove Spaces", icon: "fa-broom", link: "/tools/remove-spaces", desc: "Sanitize buffers by purging excessive spatial entropy.", cat: "DATA" },

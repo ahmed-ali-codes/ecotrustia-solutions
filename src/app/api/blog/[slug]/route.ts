@@ -1,22 +1,12 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { Blog, BlogSchema } from '../../../adminx/lib/db';
+import { readJsonBlob, writeJsonBlob } from '../../../../lib/blob-storage';
 
-const blogsFilePath = path.join(process.cwd(), 'data', 'blogs.json');
-
-const readBlogs = (): Blog[] => {
-  const data = fs.readFileSync(blogsFilePath, 'utf-8');
-  return JSON.parse(data);
-};
-
-const writeBlogs = (blogs: Blog[]) => {
-  fs.writeFileSync(blogsFilePath, JSON.stringify(blogs, null, 2));
-};
+const DATA_KEY = 'data/blogs.json';
 
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const blogs = readBlogs();
+  const blogs = await readJsonBlob<Blog>(DATA_KEY);
   const blog = blogs.find((p) => p.slug === slug);
 
   if (!blog) {
@@ -35,7 +25,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ slug: st
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  const blogs = readBlogs();
+  const blogs = await readJsonBlob<Blog>(DATA_KEY);
   const index = blogs.findIndex((p) => p.slug === slug);
 
   if (index === -1) {
@@ -43,21 +33,21 @@ export async function PUT(req: Request, { params }: { params: Promise<{ slug: st
   }
 
   blogs[index] = result.data;
-  writeBlogs(blogs);
+  await writeJsonBlob(DATA_KEY, blogs);
 
   return NextResponse.json(result.data);
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const blogs = readBlogs();
+  const blogs = await readJsonBlob<Blog>(DATA_KEY);
   const filteredBlogs = blogs.filter((p) => p.slug !== slug);
 
   if (blogs.length === filteredBlogs.length) {
     return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
   }
 
-  writeBlogs(filteredBlogs);
+  await writeJsonBlob(DATA_KEY, filteredBlogs);
 
   return new NextResponse(null, { status: 204 });
 }
