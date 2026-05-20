@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -22,6 +22,43 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    interest: 'AI Automated Call Service',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+    
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.interest,
+          message: formData.message,
+          services: [formData.interest]
+        })
+      });
+      
+      if (res.ok) {
+        setFormStatus('success');
+        setFormData({ name: '', email: '', interest: 'AI Automated Call Service', message: '' });
+        setTimeout(() => setFormStatus('idle'), 5000);
+      } else {
+        setFormStatus('error');
+      }
+    } catch (err) {
+      setFormStatus('error');
+    }
+  };
 
   const aiServices = [
     { title: "AI Automated Call Service", icon: "fa-phone-volume", desc: "Intelligent voice recognition and smart call routing with 24/7 autonomous availability." },
@@ -346,20 +383,38 @@ export default function Home() {
 
           <div className="glass-card p-0 overflow-hidden">
             <div className="p-8 lg:p-12">
-              <form id="contactForm" className="space-y-6">
+              <form id="contactForm" className="space-y-6" onSubmit={handleContactSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="form-group">
                     <label>Inquirer Name</label>
-                    <input type="text" className="form-control" placeholder="e.g. Julian Thorne" required />
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      placeholder="e.g. Julian Thorne" 
+                      required 
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    />
                   </div>
                   <div className="form-group">
                     <label>Email Address</label>
-                    <input type="email" className="form-control" placeholder="julian@future.io" required />
+                    <input 
+                      type="email" 
+                      className="form-control" 
+                      placeholder="julian@future.io" 
+                      required 
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    />
                   </div>
                 </div>
                 <div className="form-group">
                   <label>Primary Interest</label>
-                  <select className="form-control appearance-none">
+                  <select 
+                    className="form-control appearance-none"
+                    value={formData.interest}
+                    onChange={(e) => setFormData({...formData, interest: e.target.value})}
+                  >
                     <optgroup label="AI Automation">
                       {aiServices.map(s => <option key={s.title}>{s.title}</option>)}
                     </optgroup>
@@ -370,10 +425,35 @@ export default function Home() {
                 </div>
                 <div className="form-group">
                   <label>Project Blueprint (Message)</label>
-                  <textarea className="form-control min-h-[120px]" placeholder="Briefly describe your vision..."></textarea>
+                  <textarea 
+                    className="form-control min-h-[120px]" 
+                    placeholder="Briefly describe your vision..."
+                    required
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  ></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary w-full py-4 text-lg">
-                  Initiate Project <i className="fas fa-bolt ml-2"></i>
+
+                {formStatus === 'success' && (
+                  <div className="p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-400 text-sm text-center">
+                    Message received successfully. Our team will contact you shortly.
+                  </div>
+                )}
+                
+                {formStatus === 'error' && (
+                  <div className="p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-400 text-sm text-center">
+                    An error occurred. Please try again or email us directly.
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-full py-4 text-lg"
+                  disabled={formStatus === 'submitting'}
+                >
+                  {formStatus === 'submitting' ? 'Transmitting...' : (
+                    <>Initiate Project <i className="fas fa-bolt ml-2"></i></>
+                  )}
                 </button>
               </form>
             </div>
