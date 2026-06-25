@@ -1,6 +1,8 @@
 {
   "name": "final-web-app",
   "version": "0.1.0",
+  "description": "EcoTrustia is a premier digital agency specializing in AI development, Web3 solutions, mobile app engineering, and automation services.",
+  "keywords": ["ai", "web3", "mobile-app", "automation", "digital-agency", "blockchain", "nextjs"],
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
