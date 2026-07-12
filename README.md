@@ -73,7 +73,9 @@ The integrated workbench includes 40+ professional-grade tools across multiple c
    ```
 
 ## 📄 License
-Private Repository - All Rights Reserved.
+Proprietary - All Rights Reserved.
+
+You may view the code for educational and demonstration purposes, but you may not use, modify, distribute, or reproduce any part of this software for commercial purposes without explicit permission.
 
 ---
-*By Ecotrustia Solutions, All rights reserved.*
+*© 2026 Ecotrustia Solutions. All Rights Reserved.*
