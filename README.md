@@ -1,13 +1,21 @@
-# Ecotrustia Neural Workbench
+# Ecotrustia Solutions
 
-A premium, high-fidelity suite of digital tools and utilities built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**. Designed with a state-of-the-art glassmorphic "Neural Workbench" aesthetic, this application provides a centralized hub for developer productivity, media processing, and scientific calculations.
+A premier digital agency platform and high-fidelity utility suite built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**. 
 
-## 🚀 Live Demo
+Ecotrustia Solutions specializes in architecting high-scale digital ecosystems, offering advanced agency services alongside a state-of-the-art glassmorphic "Neural Workbench" that provides a centralized hub for developer productivity.
+
+## 🚀 Live Platform
 https://ecotrustia-solutions.vercel.app/
 
-## 🛠 Features
+## 🏢 Agency Services
+As a high-performance digital agency, we specialize in:
+- **AI Development & Automation**: Intelligent systems and workflows.
+- **Web3 & Blockchain**: Decentralized applications and smart contracts.
+- **Full-Stack Web & Mobile Engineering**: Scalable, modern application architecture.
 
-The workbench includes 40+ professional-grade tools across multiple categories:
+## 🛠 Neural Workbench Features
+
+The integrated workbench includes 40+ professional-grade tools across multiple categories:
 
 ### 📐 Engineering & Science
 - **Temperature Converter**: Bi-directional scaling between Celsius, Fahrenheit, and Kelvin.
