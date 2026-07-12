@@ -3,7 +3,7 @@
 A premium, high-fidelity suite of digital tools and utilities built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**. Designed with a state-of-the-art glassmorphic "Neural Workbench" aesthetic, this application provides a centralized hub for developer productivity, media processing, and scientific calculations.
 
 ## 🚀 Live Demo
-Deploy your own version on [Vercel](https://vercel.com).
+https://ecotrustia-solutions.vercel.app/
 
 ## 🛠 Features
 
@@ -53,7 +53,13 @@ The workbench includes 40+ professional-grade tools across multiple categories:
    npm install
    ```
 
-3. **Run the development server**:
+3. **Environment Setup**:
+   Copy the example environment file and fill in your details (especially the JWT secret and Vercel Blob token):
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. **Run the development server**:
    ```bash
    npm run dev
    ```
@@ -62,4 +68,4 @@ The workbench includes 40+ professional-grade tools across multiple categories:
 Private Repository - All Rights Reserved.
 
 ---
-*Synthesized by Antigravity AI for Ecotrustia Solutions.*
+*By Ecotrustia Solutions, All rights reserved.*
