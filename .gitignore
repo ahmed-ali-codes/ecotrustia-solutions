@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -44,5 +45,7 @@ next-env.d.ts
 fix_h2_margin.js
 fix_layout.js
 update_margin_20px.js
+update_h1.js
+find_overflow.js
 micro_gym.json
 microlink.json
