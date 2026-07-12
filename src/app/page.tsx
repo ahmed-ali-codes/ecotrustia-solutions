@@ -461,10 +461,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WhatsApp Button */}
-      <a href="https://wa.me/971557888645" className="whatsapp-float group" target="_blank">
-        <i className="fab fa-whatsapp text-3xl text-white"></i>
-      </a>
 
       <style jsx>{`
         .fade-in-init {

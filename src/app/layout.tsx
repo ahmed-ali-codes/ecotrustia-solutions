@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import FloatingWidgets from "./components/FloatingWidgets";
 import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
@@ -83,6 +84,7 @@ export default function RootLayout({
           {children}
         </main>
         {!isAdminPage && <Footer />}
+        {!isAdminPage && <FloatingWidgets />}
       </body>
     </html>
   );

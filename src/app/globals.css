@@ -378,26 +378,6 @@ section {
   }
 }
 
-/* WhatsApp Float */
-.whatsapp-float {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 60px;
-  height: 60px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-  z-index: 100;
-  transition: all 0.3s ease;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1) rotate(10deg);
-}
 
 /* Universal FAQ Item Styling */
 .faq-item {
