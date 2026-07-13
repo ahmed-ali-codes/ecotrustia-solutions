@@ -84,6 +84,29 @@ export default function FloatingWidgets() {
         .msg-area::-webkit-scrollbar { width: 4px; }
         .msg-area::-webkit-scrollbar-track { background: transparent; }
         .msg-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+        
+        @media (max-width: 768px) {
+          .chatbox-mobile {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            max-height: 100% !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            z-index: 100000 !important;
+          }
+          .mobile-hide-when-open {
+            display: none !important;
+          }
+          .mobile-safe-bottom {
+            padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+          }
+        }
       `}</style>
 
       <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
@@ -91,10 +114,12 @@ export default function FloatingWidgets() {
         {/* ═══ Chat Window ═══ */}
         {isOpen && (
           <div
-            className="chatbox flex flex-col overflow-hidden mb-2"
+            className="chatbox chatbox-mobile flex flex-col overflow-hidden mb-2"
             style={{
-              width: 'min(400px, calc(100vw - 40px))',
-              height: 'min(620px, calc(100vh - 140px))',
+              width: '400px',
+              height: '620px',
+              maxWidth: 'calc(100vw - 40px)',
+              maxHeight: 'calc(100vh - 140px)',
               borderRadius: '20px',
               background: '#0d0b1a',
               boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(139,92,246,0.15)',
@@ -217,7 +242,7 @@ export default function FloatingWidgets() {
             )}
 
             {/* ── Input ── */}
-            <div className="shrink-0" style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="shrink-0 mobile-safe-bottom" style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
               <form onSubmit={handleSend} className="flex items-center" style={{ gap: '12px' }}>
                 <input
                   ref={inputRef}
@@ -256,7 +281,7 @@ export default function FloatingWidgets() {
         )}
 
         {/* ═══ FAB Buttons ═══ */}
-        <div className="flex flex-col items-center gap-3">
+        <div className={`flex flex-col items-center gap-3 ${isOpen ? 'mobile-hide-when-open' : ''}`}>
           {/* Chat FAB */}
           <div className="relative group">
             <button
