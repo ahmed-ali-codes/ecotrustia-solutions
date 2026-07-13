@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaWhatsapp, FaRobot, FaTimes, FaPaperPlane } from 'react-icons/fa';
+import { FaWhatsapp, FaTimes, FaPaperPlane, FaRobot } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -16,6 +18,7 @@ export default function FloatingWidgets() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,6 +27,7 @@ export default function FloatingWidgets() {
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
+      setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [messages, isOpen]);
 
@@ -50,7 +54,7 @@ export default function FloatingWidgets() {
       } else {
         setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, I am having trouble connecting right now. Please try again later.' }]);
       }
-    } catch (error) {
+    } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: 'An error occurred. Please try again.' }]);
     } finally {
       setIsLoading(false);
@@ -58,105 +62,252 @@ export default function FloatingWidgets() {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
-      {/* Chat Window */}
-      {/* Chat Window */}
-      {isOpen && (
-        <div className="bg-[#0f172a]/60 backdrop-blur-3xl border border-white/20 rounded-[1.5rem] w-[350px] sm:w-[380px] h-[500px] sm:h-[600px] flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(139,92,246,0.15)] overflow-hidden mb-4 animate-in fade-in slide-in-from-bottom-5">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-primary/80 to-secondary/80 p-4 flex justify-between items-center text-white border-b border-white/10 relative overflow-hidden shrink-0">
-            <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
-            <div className="flex items-center gap-3 relative z-10">
-              <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <FaRobot className="text-xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              </div>
-              <div className="flex flex-col justify-center">
-                <h3 className="font-bold text-[15px] leading-none tracking-wide mb-1">Ecotrustia AI</h3>
-                <p className="text-[10px] text-white/80 uppercase tracking-widest font-semibold flex items-center gap-1.5 leading-none"><span className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)] animate-pulse"></span> Online</p>
+    <>
+      <style>{`
+        @keyframes chatOpen {
+          from { opacity: 0; transform: translateY(16px) scale(0.96); }
+          to   { opacity: 1; transform: translateY(0)   scale(1);    }
+        }
+        @keyframes fabPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.45); }
+          50%       { box-shadow: 0 0 0 10px rgba(124,58,237,0); }
+        }
+        @keyframes bounce {
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+          40%           { transform: translateY(-6px); opacity: 1; }
+        }
+        .chatbox { animation: chatOpen 0.3s ease-out both; }
+        .fab-pulse { animation: fabPulse 2.5s infinite; }
+        .bounce-1 { animation: bounce 1.2s 0s infinite; }
+        .bounce-2 { animation: bounce 1.2s 0.15s infinite; }
+        .bounce-3 { animation: bounce 1.2s 0.3s infinite; }
+        .msg-area::-webkit-scrollbar { width: 4px; }
+        .msg-area::-webkit-scrollbar-track { background: transparent; }
+        .msg-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+      `}</style>
+
+      <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
+
+        {/* ═══ Chat Window ═══ */}
+        {isOpen && (
+          <div
+            className="chatbox flex flex-col overflow-hidden mb-2"
+            style={{
+              width: 'min(400px, calc(100vw - 40px))',
+              height: 'min(620px, calc(100vh - 140px))',
+              borderRadius: '20px',
+              background: '#0d0b1a',
+              boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(139,92,246,0.15)',
+            }}
+          >
+
+            {/* ── Header ── */}
+            <div
+              className="shrink-0"
+              style={{
+                background: 'linear-gradient(135deg, #6d28d9 0%, #4f46e5 60%, #7c3aed 100%)',
+                padding: '20px',
+                borderBottom: '1px solid rgba(255,255,255,0.15)',
+                marginBottom: '1px'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+                    style={{
+                      background: 'rgba(255,255,255,0.18)',
+                      border: '1.5px solid rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    <FaRobot className="text-white text-[22px]" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-[17px] leading-snug" style={{ marginBottom: '2px' }}>Ecotrustia AI</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                      <span className="text-white/60 text-[12px] font-medium">Online</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                  aria-label="Close chat"
+                >
+                  <FaTimes className="text-[15px]" />
+                </button>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-2 rounded-full transition relative z-10">
-              <FaTimes className="text-lg" />
-            </button>
-          </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 pb-8 flex flex-col gap-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent relative">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-lg backdrop-blur-md ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-br from-primary to-[#7c3aed] text-white self-end rounded-tr-sm shadow-[0_8px_20px_rgba(139,92,246,0.25)] border border-primary/30'
-                    : 'bg-white/10 border border-white/10 text-gray-100 self-start rounded-tl-sm shadow-[0_8px_20px_rgba(0,0,0,0.2)]'
-                }`}
-              >
-                {msg.content}
-              </div>
-            ))}
-            {isLoading && (
-              <div className="bg-white/10 border border-white/10 text-gray-100 self-start rounded-2xl rounded-tl-sm shadow-[0_8px_20px_rgba(0,0,0,0.2)] backdrop-blur-md px-4 py-3 text-sm flex gap-1.5 items-center">
-                <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-bounce"></span>
-                <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></span>
-                <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></span>
+            {/* ── Messages ── */}
+            <div className="msg-area flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-4" style={{ padding: '20px' }}>
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className="max-w-[85%] text-[14px] leading-[1.7] break-words"
+                    style={msg.role === 'user' ? {
+                      padding: '12px 16px',
+                      background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                      color: '#fff',
+                      borderRadius: '16px 16px 4px 16px',
+                    } : {
+                      padding: '12px 16px',
+                      background: 'rgba(255,255,255,0.06)',
+                      color: 'rgba(255,255,255,0.88)',
+                      borderRadius: '16px 16px 16px 4px',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
+                  >
+                    {msg.role === 'assistant' ? (
+                      <div className="[&_p]:mb-3 last:[&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-3 [&_li]:mb-1.5 [&_strong]:font-semibold [&_strong]:text-white [&_a]:text-violet-400 [&_a]:underline hover:[&_a]:text-violet-300 [&_code]:bg-black/20 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[13px] [&_pre]:bg-black/20 [&_pre]:p-3 [&_pre]:rounded-lg [&_pre]:my-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:mb-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:mb-2 [&_h3]:text-[15px] [&_h3]:font-bold [&_h3]:mb-2">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <span>{msg.content}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Typing */}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div
+                    className="flex items-center gap-[5px]"
+                    style={{
+                      padding: '12px 20px',
+                      background: 'rgba(255,255,255,0.06)',
+                      borderRadius: '16px 16px 16px 4px',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
+                  >
+                    <span className="bounce-1 w-2 h-2 rounded-full bg-violet-400 inline-block" />
+                    <span className="bounce-2 w-2 h-2 rounded-full bg-violet-400 inline-block" />
+                    <span className="bounce-3 w-2 h-2 rounded-full bg-violet-400 inline-block" />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* ── Quick Replies ── */}
+            {messages.length === 1 && (
+              <div className="flex flex-wrap gap-2.5" style={{ padding: '0 20px 20px 20px' }}>
+                {['Our Services', 'AI Solutions', 'Get a Quote'].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => { setInput(q); inputRef.current?.focus(); }}
+                    className="text-[14px] font-medium rounded-full whitespace-nowrap transition-colors hover:bg-white/10"
+                    style={{
+                      padding: '10px 18px',
+                      color: 'rgba(255,255,255,0.7)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      background: 'rgba(255,255,255,0.04)',
+                    }}
+                  >
+                    {q}
+                  </button>
+                ))}
               </div>
             )}
-            <div ref={messagesEndRef} />
+
+            {/* ── Input ── */}
+            <div className="shrink-0" style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <form onSubmit={handleSend} className="flex items-center" style={{ gap: '12px' }}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask me anything..."
+                  className="flex-1 min-w-0 text-[14px] text-white placeholder-white/30 outline-none rounded-xl transition-colors"
+                  style={{
+                    padding: '14px 16px',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(139,92,246,0.4)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(255,255,255,0.1)';
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !input.trim()}
+                  className="rounded-xl flex items-center justify-center text-white shrink-0 transition-opacity disabled:opacity-30"
+                  style={{
+                    width: '46px',
+                    height: '46px',
+                    background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+                  }}
+                >
+                  <FaPaperPlane className="text-sm" />
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* ═══ FAB Buttons ═══ */}
+        <div className="flex flex-col items-center gap-3">
+          {/* Chat FAB */}
+          <div className="relative group">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Open AI Chatbot"
+              className="fab-pulse w-[60px] h-[60px] rounded-full flex items-center justify-center text-white transition-transform duration-200 hover:scale-110 active:scale-95"
+              style={{
+                background: isOpen
+                  ? 'linear-gradient(135deg, #4f46e5, #7c3aed)'
+                  : 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                boxShadow: '0 8px 32px rgba(124,58,237,0.4)',
+              }}
+            >
+              {isOpen ? <FaTimes className="text-xl" /> : <FaRobot className="text-[26px]" />}
+            </button>
+            {!isOpen && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#0f172a] flex items-center justify-center">
+                <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping absolute" />
+              </span>
+            )}
+            <span
+              className="absolute right-full mr-3 top-1/2 -translate-y-1/2 text-[12px] font-medium text-white px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.8)' }}
+            >
+              {isOpen ? 'Close chat' : 'Ask AI Assistant'}
+            </span>
           </div>
 
-          {/* Input Area */}
-          <div className="p-4 bg-[#0f172a]/90 backdrop-blur-md border-t border-white/10 shrink-0">
-            <form onSubmit={handleSend} className="flex gap-2 relative">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me anything..."
-                className="w-full bg-white/5 border border-white/20 rounded-full py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/80 focus:shadow-[0_0_15px_rgba(139,92,246,0.3)] focus:bg-white/10 transition-all pr-[42px] placeholder-white/40"
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="absolute right-1 top-1/2 -translate-y-1/2 bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_15px_rgba(139,92,246,0.6)] hover:scale-105 text-white rounded-full p-2 transition-all disabled:opacity-50 disabled:shadow-none disabled:hover:scale-100"
-              >
-                <FaPaperPlane className="text-xs ml-[-1px] mt-[1px]" />
-              </button>
-            </form>
+          {/* WhatsApp FAB */}
+          <div className="relative group">
+            <a
+              href="https://wa.me/971557888645"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[60px] h-[60px] rounded-2xl flex items-center justify-center text-white transition-transform duration-200 hover:scale-110 active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                boxShadow: '0 8px 28px rgba(37,211,102,0.3)',
+              }}
+            >
+              <FaWhatsapp className="text-[30px]" />
+            </a>
+            <span
+              className="absolute right-full mr-3 top-1/2 -translate-y-1/2 text-[12px] font-medium text-white px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.8)' }}
+            >
+              Chat on WhatsApp
+            </span>
           </div>
         </div>
-      )}
-
-      {/* Floating Buttons */}
-      <div className="flex flex-col gap-3 items-center">
-        {/* Chatbot Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-[60px] h-[60px] bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center text-white shadow-[0_5px_20px_rgba(139,92,246,0.4)] hover:scale-110 transition-transform duration-300 z-[100] group relative"
-          aria-label="Open AI Chatbot"
-        >
-          {isOpen ? <FaTimes className="text-2xl" /> : <FaRobot className="text-2xl" />}
-          
-          {/* Tooltip */}
-          <span className="absolute right-full mr-4 bg-black/80 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
-            {isOpen ? 'Close Chat' : 'Ask AI Assistant'}
-          </span>
-        </button>
-
-        {/* WhatsApp Button (Moved from page.tsx) */}
-        <a 
-          href="https://wa.me/971557888645" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-[60px] h-[60px] bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-[0_5px_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform duration-300 z-[100] group relative"
-        >
-          <FaWhatsapp className="text-[32px]" />
-          
-          {/* Tooltip */}
-          <span className="absolute right-full mr-4 bg-black/80 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
-            Chat on WhatsApp
-          </span>
-        </a>
       </div>
-    </div>
+    </>
   );
 }
