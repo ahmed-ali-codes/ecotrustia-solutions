@@ -2,6 +2,8 @@
 
 A premier digital agency platform and high-fidelity utility suite built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**. 
 
+![Ecotrustia Solutions Live Site](./public/images/screenshot.png)
+
 Ecotrustia Solutions specializes in architecting high-scale digital ecosystems, offering advanced agency services alongside a state-of-the-art glassmorphic "Neural Workbench" that provides a centralized hub for developer productivity.
 
 ## 🚀 Live Platform
