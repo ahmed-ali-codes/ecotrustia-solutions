@@ -126,6 +126,7 @@ export default function Home() {
                     alt="Neural Architecture"
                     width={600}
                     height={600}
+                    priority
                     className="rounded-[1.8rem] opacity-90 hover:scale-105 transition-transform duration-700"
                   />
                 </div>

@@ -46,6 +46,7 @@ const Header = () => {
                 src="/images/logo.jpg"
                 alt="Ecotrustia Solutions Logo"
                 fill
+                sizes="40px"
                 className="object-cover"
               />
             </div>

@@ -14,11 +14,68 @@ interface Project {
   link?: string;
   metaDescription?: string;
   technologies?: string;
+  type?: string;
 }
+
+const ProjectCard = ({ project }: { project: Project }) => (
+  <div key={project.id} className="fade-up relative group">
+    <div className="glass-card h-full p-2 rounded-[2rem] border border-white/5 bg-black/40 shadow-xl backdrop-blur-xl transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.5)] overflow-hidden flex flex-col">
+      <div className="p-6 md:p-10 flex flex-col flex-1 z-10 relative">
+        {project.technologies && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.technologies.split(',').map((tech, i) => (
+              <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase tracking-widest text-white/70">
+                {tech.trim()}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <h3 className="text-3xl font-black mb-4 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">{project.title}</h3>
+
+        <div className="relative mb-4">
+          <p className="text-muted/90 text-sm leading-relaxed max-h-[120px] overflow-y-auto pr-3 custom-scrollbar">
+            {project.description}
+          </p>
+        </div>
+
+        {project.metaDescription && (
+          <p className="text-xs text-white/30 italic mb-8 border-l border-white/10 pl-3">
+            SEO / Meta: {project.metaDescription}
+          </p>
+        )}
+
+        <div className="mt-8 mb-6 flex items-center justify-between">
+          {project.link ? (
+            <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-8 py-3 text-xs tracking-widest rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]">
+              Launch Interface <i className="fas fa-external-link-alt ml-2"></i>
+            </a>
+          ) : (
+            <span className="px-6 py-3 border border-white/10 rounded-xl text-xs tracking-widest text-muted bg-white/5 cursor-not-allowed">
+              Node Offline
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="w-full shrink-0 relative aspect-[16/10] z-0 overflow-hidden rounded-b-[1.8rem] bg-black">
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/80 z-10 pointer-events-none"></div>
+        <img
+          src={project.image}
+          alt={project.title}
+          className="object-cover w-full h-full object-top opacity-70 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700 ease-out grayscale group-hover:grayscale-0"
+        />
+      </div>
+    </div>
+  </div>
+);
 
 export default function PortfolioPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const webProjects = projects.filter(p => !p.type || p.type === 'web');
+  const automationProjects = projects.filter(p => p.type === 'automation');
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -97,65 +154,40 @@ export default function PortfolioPage() {
               <p className="text-muted">Awaiting uplink from the admin framework.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-              {projects.map((project, idx) => (
-                <div key={project.id} className="fade-up relative group">
-                  <div className="glass-card h-full p-2 rounded-[2rem] border border-white/5 bg-black/40 shadow-xl backdrop-blur-xl transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.5)] overflow-hidden flex flex-col">
-
-                    {/* Inner Details Container */}
-                    <div className="p-6 md:p-10 flex flex-col flex-1 z-10 relative">
-                      {/* Tags / Technologies */}
-                      {project.technologies && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {project.technologies.split(',').map((tech, i) => (
-                            <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase tracking-widest text-white/70">
-                              {tech.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      <h3 className="text-3xl font-black mb-4 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">{project.title}</h3>
-
-                      <div className="relative mb-4">
-                        <p className="text-muted/90 text-sm leading-relaxed max-h-[120px] overflow-y-auto pr-3 custom-scrollbar">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      {/* Hidden SEO Meta Description for bots (plus subtle display) */}
-                      {project.metaDescription && (
-                        <p className="text-xs text-white/30 italic mb-8 border-l border-white/10 pl-3">
-                          SEO / Meta: {project.metaDescription}
-                        </p>
-                      )}
-
-                      <div className="mt-8 mb-6 flex items-center justify-between">
-                        {project.link ? (
-                          <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-8 py-3 text-xs tracking-widest rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]">
-                            Launch Interface <i className="fas fa-external-link-alt ml-2"></i>
-                          </a>
-                        ) : (
-                          <span className="px-6 py-3 border border-white/10 rounded-xl text-xs tracking-widest text-muted bg-white/5 cursor-not-allowed">
-                            Node Offline
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Image Background Container fixed for responsive screen scaling */}
-                    <div className="w-full shrink-0 relative aspect-[16/10] z-0 overflow-hidden rounded-b-[1.8rem] bg-black">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/80 z-10 pointer-events-none"></div>
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="object-cover w-full h-full object-top opacity-70 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700 ease-out grayscale group-hover:grayscale-0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <>
+              <div className="fade-up w-full text-center lg:text-left" style={{ marginBottom: '20px' }}>
+                <h2 className="text-3xl font-bold text-white tracking-tight">Web Projects</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                {webProjects.slice(0, 4).map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            
+            <div className="flex justify-center fade-up w-full" style={{ marginTop: '100px', marginBottom: '100px' }}>
+              <Link href="/projects" className="btn btn-primary px-10 py-4 text-sm tracking-widest rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.7)] uppercase font-medium group">
+                View More Projects <i className="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+              </Link>
             </div>
+
+            {/* Automation Projects Section */}
+            <div className="fade-up w-full text-center lg:text-left" style={{ marginBottom: '20px' }}>
+              <h2 className="text-3xl font-bold text-white tracking-tight">Automation Projects</h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {automationProjects.length === 0 ? (
+                <div className="col-span-1 lg:col-span-2 text-center py-16 glass-card rounded-3xl border-dashed border-white/10">
+                  <i className="fas fa-robot text-4xl text-muted/50 mb-4"></i>
+                  <h3 className="text-2xl text-white mb-2">Workflows Offline</h3>
+                  <p className="text-muted">Insert your automation and workflow architectures here.</p>
+                </div>
+              ) : (
+                automationProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))
+              )}
+            </div>
+            </>
           )}
         </div>
       </section>
