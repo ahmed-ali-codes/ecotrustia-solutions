@@ -182,10 +182,16 @@ export default function PortfolioPage() {
                   <p className="text-muted">Insert your automation and workflow architectures here.</p>
                 </div>
               ) : (
-                automationProjects.map((project) => (
+                automationProjects.slice(0, 4).map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))
               )}
+            </div>
+            
+            <div className="flex justify-center fade-up w-full" style={{ marginTop: '100px', marginBottom: '100px' }}>
+              <Link href="/projects" className="btn btn-primary px-10 py-4 text-sm tracking-widest rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.7)] uppercase font-medium group">
+                View More Projects <i className="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+              </Link>
             </div>
             </>
           )}
