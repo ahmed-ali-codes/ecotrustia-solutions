@@ -33,3 +33,26 @@ export async function POST(req: Request) {
 
   return NextResponse.json(result.data, { status: 201 });
 }
+
+export async function PUT(req: Request) {
+  try {
+    const projects = await req.json();
+    
+    if (!Array.isArray(projects)) {
+      return NextResponse.json({ error: 'Expected an array of projects' }, { status: 400 });
+    }
+    
+    for (const project of projects) {
+      const result = ProjectSchema.safeParse(project);
+      if (!result.success) {
+        return NextResponse.json({ error: result.error.issues }, { status: 400 });
+      }
+    }
+    
+    await writeJsonBlob(DATA_KEY, projects);
+    return NextResponse.json({ success: true, count: projects.length });
+  } catch (error) {
+    console.error('Error updating project order:', error);
+    return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
+  }
+}

@@ -47,3 +47,28 @@
   background-color: #d9534f;
   color: white;
 }
+
+.drag-handle {
+  cursor: grab;
+  color: #666;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.drag-handle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.project-item.dragging {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-color: #8B5CF6;
+}

@@ -13,6 +13,7 @@ export default function NewProjectPage() {
   const [link, setLink] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
   const [technologies, setTechnologies] = useState('');
+  const [type, setType] = useState('web');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -37,7 +38,8 @@ export default function NewProjectPage() {
       image,
       link,
       metaDescription,
-      technologies
+      technologies,
+      type
     };
 
     const result = ProjectSchema.safeParse(newProject);
@@ -47,11 +49,17 @@ export default function NewProjectPage() {
       return;
     }
 
-    await fetch('/api/portfolio', {
+    const res = await fetch('/api/portfolio', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(result.data),
     });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
+      return;
+    }
 
     router.push('/adminx/portfolio');
   };
@@ -66,6 +74,14 @@ export default function NewProjectPage() {
       </div>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit} className="new-project-form">
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        >
+          <option value="web">Web Project</option>
+          <option value="automation">Automation Project</option>
+        </select>
         <input
           type="text"
           placeholder="Title *"

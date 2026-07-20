@@ -24,6 +24,7 @@ export const ProjectSchema = z.object({
   link: z.string().optional(),
   metaDescription: z.string().optional(),
   technologies: z.string().optional(),
+  type: z.enum(['web', 'automation']).optional().default('web'),
 });
 
 export type Project = z.infer<typeof ProjectSchema>;

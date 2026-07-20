@@ -17,6 +17,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
   const [link, setLink] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
   const [technologies, setTechnologies] = useState('');
+  const [type, setType] = useState('web');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -31,6 +32,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
       setLink(data.link || '');
       setMetaDescription(data.metaDescription || '');
       setTechnologies(data.technologies || '');
+      setType(data.type || 'web');
     };
     fetchProject();
   }, [id]);
@@ -58,7 +60,8 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
       image,
       link,
       metaDescription,
-      technologies
+      technologies,
+      type
     };
 
     const result = ProjectSchema.safeParse(updatedProject);
@@ -68,11 +71,17 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
       return;
     }
 
-    await fetch(`/api/portfolio/${project.id}`, {
+    const res = await fetch(`/api/portfolio/${project.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(result.data),
     });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
+      return;
+    }
 
     router.push('/adminx/portfolio');
   };
@@ -91,6 +100,14 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
       </div>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit} className="edit-project-form">
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        >
+          <option value="web">Web Project</option>
+          <option value="automation">Automation Project</option>
+        </select>
         <input
           type="text"
           placeholder="Title *"
