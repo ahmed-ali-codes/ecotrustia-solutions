@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-// Throw an error during startup if the JWT_SECRET is not set.
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET environment variable is not set');
 }
@@ -13,19 +12,34 @@ export async function proxy(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
   const { pathname } = req.nextUrl;
 
-  // Redirect to login if trying to access a protected admin page without a token.
-  if (pathname !== '/adminx/login' && !token) {
-    return NextResponse.redirect(new URL('/adminx/login', req.url));
+  const isAdminPage = pathname.startsWith('/adminx');
+  const isApiRoute = pathname.startsWith('/api');
+  const isLoginRoute = pathname === '/adminx/login' || pathname === '/api/login';
+  
+  // Allow public API GET requests
+  if (isApiRoute && req.method === 'GET') {
+    return NextResponse.next();
   }
 
-  // If a token exists, verify it for all admin paths except the login page.
-  if (token && pathname !== '/adminx/login') {
+  // Require authentication for admin pages and mutating API routes (POST, PUT, DELETE)
+  const isProtectedRoute = (isAdminPage || isApiRoute) && !isLoginRoute;
+
+  if (isProtectedRoute) {
+    if (!token) {
+      if (isApiRoute) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      return NextResponse.redirect(new URL('/adminx/login', req.url));
+    }
+
     try {
       await jwtVerify(token, JWT_SECRET, { algorithms: ['HS256'] });
     } catch (err) {
-      // If token verification fails, redirect to the login page.
+      // Token is invalid or expired
+      if (isApiRoute) {
+        return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
+      }
       const response = NextResponse.redirect(new URL('/adminx/login', req.url));
-      // Clear the invalid cookie.
       response.cookies.delete('token');
       return response;
     }
@@ -35,5 +49,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/adminx/:path*'],
+  matcher: ['/adminx/:path*', '/api/:path*'],
 };
